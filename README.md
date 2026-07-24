@@ -1,3 +1,22 @@
+# 🧠 InterviewMirror AI
+
+> **AI-powered mock interview platform that evaluates communication, confidence, and technical responses through speech analysis and AI-generated feedback.**
+
+---
+
+<p align="center">
+
+🚀 React • FastAPI • PostgreSQL • Whisper • OpenAI • MediaPipe
+
+</p>
+
+---
+
+![React](https://img.shields.io/badge/React-19-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Status](https://img.shields.io/badge/Status-In%20Development-orange)
+
 # InterviewMirror AI
 
 **One-line description**
