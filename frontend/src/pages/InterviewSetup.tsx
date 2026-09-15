@@ -14,6 +14,8 @@ export default function InterviewSetup() {
     setIsLoading(true);
 
     try {
+      const userId = localStorage.getItem('user_id');
+      
       // Send the interview config to our FastAPI backend
       const response = await fetch('http://localhost:8000/interviews/', {
         method: 'POST',
@@ -23,7 +25,8 @@ export default function InterviewSetup() {
         body: JSON.stringify({
           role: role,
           difficulty: difficulty,
-          type: type
+          type: type,
+          user_id: userId
         }),
       });
 

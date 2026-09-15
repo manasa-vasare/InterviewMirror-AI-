@@ -14,12 +14,24 @@ interface Interview {
 export default function Dashboard() {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const userName = localStorage.getItem('user_name') || 'User';
+
+  const handleLogout = () => {
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_name');
+    window.location.href = '/login';
+  };
 
   // Fetch real data from FastAPI backend
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
-        const response = await fetch('http://localhost:8000/interviews/');
+        const userId = localStorage.getItem('user_id');
+        const url = userId 
+          ? `http://localhost:8000/interviews/?user_id=${userId}`
+          : 'http://localhost:8000/interviews/';
+          
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           setInterviews(data);
@@ -62,9 +74,15 @@ export default function Dashboard() {
           <Link to="/" className="text-xl font-extrabold text-gray-900 tracking-tight">
             InterviewMirror AI
           </Link>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
+            <button 
+              onClick={handleLogout}
+              className="text-xs font-bold text-gray-500 hover:text-gray-900 uppercase tracking-widest transition-colors"
+            >
+              Log out
+            </button>
             <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white font-bold text-sm">
-              IM
+              {userName.charAt(0).toUpperCase()}
             </div>
           </div>
         </div>
@@ -74,7 +92,7 @@ export default function Dashboard() {
         {/* Header & CTA */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-12">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2 tracking-tight">Welcome back! 👋</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2 tracking-tight">Welcome back, {userName}! 👋</h1>
             <p className="text-gray-500 font-medium text-lg">Ready to ace your next interview?</p>
           </div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="mt-6 md:mt-0">

@@ -10,11 +10,26 @@ export default function InterviewScreen() {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [question, setQuestion] = useState('Loading question...');
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  const QUESTION = "Can you tell me about a time you had to learn a new technology on the fly?";
+  useEffect(() => {
+    const fetchInterview = async () => {
+      if (!interviewId) return;
+      try {
+        const response = await fetch(`http://localhost:8000/interviews/${interviewId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setQuestion(data.current_question || 'Can you tell me about yourself?');
+        }
+      } catch (e) {
+        console.error("Failed to fetch interview", e);
+      }
+    };
+    fetchInterview();
+  }, [interviewId]);
 
   const startRecording = async () => {
     try {
@@ -39,7 +54,7 @@ export default function InterviewScreen() {
           const formData = new FormData();
           formData.append('audio_file', audioBlob, 'answer.webm');
           formData.append('interview_id', interviewId || 'demo');
-          formData.append('question', QUESTION);
+          formData.append('question', question);
 
           const response = await fetch('http://localhost:8000/submit_audio/', {
             method: 'POST',
@@ -130,7 +145,7 @@ export default function InterviewScreen() {
             Question 1 of 5
           </div>
           <h2 className="text-3xl md:text-5xl font-semibold leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
-            "{QUESTION}"
+            "{question}"
           </h2>
         </motion.div>
 

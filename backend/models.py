@@ -26,6 +26,7 @@ class Interview(Base):
     role = Column(String, index=True)
     difficulty = Column(String)
     score = Column(Float, nullable=True)
+    current_question = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     user = relationship("User", back_populates="interviews")
